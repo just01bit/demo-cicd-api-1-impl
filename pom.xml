@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>34f08f6e-2359-4148-8b9b-27ed6bf1f80d</groupId>
+	<artifactId>demo-cicd-api-1-impl</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>mule-application</packaging>
+
+	<name>demo-cicd-api-1-impl</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+		<app.runtime>4.8.1</app.runtime>
+		<mule.maven.plugin.version>4.3.0</mule.maven.plugin.version>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.2.0</version>
+			</plugin>
+			<plugin>
+				<groupId>org.mule.tools.maven</groupId>
+				<artifactId>mule-maven-plugin</artifactId>
+				<version>${mule.maven.plugin.version}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<sharedLibraries>
+						<sharedLibrary>
+							<groupId>mysql</groupId>
+							<artifactId>mysql-connector-java</artifactId>
+						</sharedLibrary>
+					</sharedLibraries>
+					
+				  <!-- CloudHub 2.0  -->	
+				    <cloudhub2Deployment>
+				      <uri>https://anypoint.mulesoft.com</uri>
+				      <provider>MC</provider>
+				      <environment>${environment}</environment>
+				      <businessGroupId>${project.groupId}</businessGroupId>
+				      <target>${target}</target>
+				      <muleVersion>${muleVersion}</muleVersion>
+				      <connectedAppClientId>${connected.app.client_id}</connectedAppClientId>
+				      <connectedAppClientSecret>${connected.app.client_secret}</connectedAppClientSecret>
+				      <connectedAppGrantType>client_credentials</connectedAppGrantType>
+				      <applicationName>${app.name.prefix}-${project.artifactId}</applicationName>
+				      <replicas>${replicas}</replicas>
+				      <vCores>${vcores}</vCores>
+				      <deploymentSettings>
+				         <generateDefaultPublicUrl>true</generateDefaultPublicUrl>
+				      </deploymentSettings>
+				      
+				      <secureProperties>
+			              <anypoint.platform.config.analytics.agent.enabled>true</anypoint.platform.config.analytics.agent.enabled>
+			              <api.id>${api.id}</api.id>
+			              <anypoint.platform.client_id>${anypoint.platform.client_id}</anypoint.platform.client_id>
+			              <anypoint.platform.client_secret>${anypoint.platform.client_secret}</anypoint.platform.client_secret>				      
+					      <db.username>${db.username}</db.username>
+					      <db.password>${db.password}</db.password>
+					      <db.keystore.password>${db.keystore.password}</db.keystore.password>
+				      </secureProperties>
+				    </cloudhub2Deployment>
+			          			          	
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.mule.connectors</groupId>
+			<artifactId>mule-http-connector</artifactId>
+			<version>1.10.3</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.connectors</groupId>
+			<artifactId>mule-sockets-connector</artifactId>
+			<version>1.2.5</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>34f08f6e-2359-4148-8b9b-27ed6bf1f80d</groupId>
+			<artifactId>demo-cicd-api-1</artifactId>
+			<version>1.0.1</version>
+			<classifier>raml</classifier>
+			<type>zip</type>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.modules</groupId>
+			<artifactId>mule-apikit-module</artifactId>
+			<version>1.11.2</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.connectors</groupId>
+			<artifactId>mule-db-connector</artifactId>
+			<version>1.14.13</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.30</version>
+		</dependency>
+	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>anypoint-exchange-v3</id>
+			<name>Anypoint Exchange</name>
+			<url>https://maven.anypoint.mulesoft.com/api/v3/maven</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>mulesoft-releases</id>
+			<name>MuleSoft Releases Repository</name>
+			<url>https://repository.mulesoft.org/releases/</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>mulesoft-releases</id>
+			<name>MuleSoft Releases Repository</name>
+			<layout>default</layout>
+			<url>https://repository.mulesoft.org/releases/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+	
+  <!-- CloudHub 2.0 
+  	the repo id here will be matched to the server in settings.xml
+  	otherwise, it
+  -->	
+  <distributionManagement>
+    <repository>
+      <id>Repository</id>
+      <name>Corporate Repository</name>
+      <url>https://maven.anypoint.mulesoft.com/api/v3/organizations/${project.groupId}/maven</url>
+      <layout>default</layout>
+    </repository>
+  </distributionManagement>	
+
+</project>
