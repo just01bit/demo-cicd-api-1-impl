@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
-http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
     <http:listener-config name="demo-cicd-api-1-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="8081" />
     </http:listener-config>
     <apikit:config name="demo-cicd-api-1-config" api="resource::34f08f6e-2359-4148-8b9b-27ed6bf1f80d:demo-cicd-api-1:1.0.1:raml:zip:demo-cicd-api-1.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <db:config name="Database_Config" doc:name="Database Config" doc:id="13eb1576-e86c-4719-8ca1-d96c9680a093" >
-		<db:my-sql-connection host="ec2-34-203-248-163.compute-1.amazonaws.com" port="3306" user="dbuser1" password="Welcome@2025!" database="Customer">
+		<db:my-sql-connection host="ec2-34-203-248-163.compute-1.amazonaws.com" port="3306" user="${db.username}" password="${db.password}" database="Customer">
 			<db:connection-properties >
 				<db:connection-property key="useSSL" value="true" />
 				<db:connection-property key="requireSSL" value="true" />
 				<db:connection-property key="clientCertificateKeyStoreUrl" value="file:${mule.home}/apps/${app.name}/keystore.jks" />
-				<db:connection-property key="clientCertificateKeyStorePassword" value="default" />
+				<db:connection-property key="clientCertificateKeyStorePassword" value="${db.keystore.password}" />
 			</db:connection-properties>
 		</db:my-sql-connection>
 	</db:config>
+	<api-gateway:autodiscovery apiId="${api.id}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="7453764b-dba0-4433-99a9-088054a08189" flowRef="demo-cicd-api-1-main" />
 	<flow name="demo-cicd-api-1-main">
         <http:listener config-ref="demo-cicd-api-1-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
