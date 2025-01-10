@@ -7,7 +7,7 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
     </http:listener-config>
     <apikit:config name="demo-cicd-api-1-config" api="resource::34f08f6e-2359-4148-8b9b-27ed6bf1f80d:demo-cicd-api-1:1.0.1:raml:zip:demo-cicd-api-1.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <db:config name="Database_Config" doc:name="Database Config" doc:id="13eb1576-e86c-4719-8ca1-d96c9680a093" >
-		<db:my-sql-connection host="ec2-34-203-248-163.compute-1.amazonaws.com" port="3306" user="${db.username}" password="${db.password}" database="Customer">
+		<db:my-sql-connection host="ec2-3-90-88-216.compute-1.amazonaws.com" port="3306" user="${db.username}" password="${db.password}" database="Customer">
 			<db:connection-properties >
 				<db:connection-property key="useSSL" value="true" />
 				<db:connection-property key="requireSSL" value="true" />
